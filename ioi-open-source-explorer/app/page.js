@@ -1,4 +1,5 @@
 import Hero from '../components/Hero';
+import ProjectList from '../components/ProjectList';
 
 export default function Home() {
   return (
@@ -7,20 +8,59 @@ export default function Home() {
 
       <section className="max-w-7xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-bold mb-8 text-center">Featured Projects</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="font-medium mb-2">Project Alpha</h3>
-            <p className="text-gray-500 text-sm">A modern web framework</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="font-medium mb-2">Project Beta</h3>
-            <p className="text-gray-500 text-sm">AI-powered tooling</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="font-medium mb-2">Project Gamma</h3>
-            <p className="text-gray-500 text-sm">Documentation hub</p>
-          </div>
-        </div>
+        <ProjectList projects={[
+          {
+            id: '1',
+            name: 'OpenSourceFeed',
+            description: 'A React-based platform for discovering trending open-source projects and contributions',
+            domain: 'Frontend',
+            technologies: ['React', 'TypeScript', 'Node.js', 'Tailwind CSS'],
+            difficulty: 'Intermediate',
+            stars: 2450,
+            beginnerFriendly: true,
+            githubUrl: 'https://github.com/opensource-ioi/opensource-feed',
+            skills: ['React', 'TypeScript', 'API Integration', 'Responsive Design'],
+            projectAdmin: {
+              name: 'Alice Chen',
+              github: 'https://github.com/alicechen',
+              linkedin: 'https://linkedin.com/in/alicechen',
+            },
+          },
+          {
+            id: '2',
+            name: 'BugBounty',
+            description: 'A full-stack application for tracking and managing software bugs with AI-powered prioritization',
+            domain: 'Backend',
+            technologies: ['Node.js', 'Go', 'Python', 'PostgreSQL'],
+            difficulty: 'Advanced',
+            stars: 3890,
+            beginnerFriendly: false,
+            githubUrl: 'https://github.com/opensource-ioi/bug-bounty',
+            skills: ['Node.js', 'Go', 'Python', 'Database Design', 'AI/ML'],
+            projectAdmin: {
+              name: 'Bob Sharma',
+              github: 'https://github.com/bobsharma',
+              linkedin: 'https://linkedin.com/in/bobsharma',
+            },
+          },
+          {
+            id: '3',
+            name: 'SkillTracker',
+            description: 'A personal learning tracker built with Next.js for IOI students to monitor skill progression',
+            domain: 'Frontend',
+            technologies: ['Next.js', 'TypeScript', 'React', 'Prisma'],
+            difficulty: 'Beginner',
+            stars: 1120,
+            beginnerFriendly: true,
+            githubUrl: 'https://github.com/opensource-ioi/skill-tracker',
+            skills: ['Next.js', 'TypeScript', 'Prisma ORM', 'CSS Modules'],
+            projectAdmin: {
+              name: 'Carol Lim',
+              github: 'https://github.com/carollim',
+              linkedin: 'https://linkedin.com/in/carollim',
+            },
+          },
+        ]} />
       </section>
 
       <section className="max-w-7xl mx-auto px-4 py-8 bg-white">
