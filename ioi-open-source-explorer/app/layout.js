@@ -1,7 +1,11 @@
+import Navbar from '../components/Navbar';
+
 export default function Layout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Navbar>{children}</Navbar>
+      </body>
     </html>
   );
 }
