@@ -78,6 +78,7 @@ export default function ProjectDetails({ project }) {
           isBookmarked={isBookmarked}
           onToggle={toggleBookmark}
         />
+        <ProjectAdmin project={project} />
         <a
           href={project.githubUrl}
           target="_blank"
@@ -98,6 +99,5 @@ export default function ProjectDetails({ project }) {
           </svg>
         </a>
       </div>
-    </div>
   );
 }
