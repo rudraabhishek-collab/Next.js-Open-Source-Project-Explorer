@@ -141,9 +141,7 @@ export default function ProjectsPage() {
                 <button
                   onClick={() => setSelectedBeginnerFriendly('Not Beginner Friendly')}
                   className={`px-3 py-1 text-sm rounded border ${
-                    !project.beginnerFriendly && selectedBeginnerFriendly !== 'All'
-                      ? 'bg-blue-600 text-white'
-                      : 'border-gray-400'
+                    selectedBeginnerFriendly === 'Not Beginner Friendly' ? 'bg-blue-600 text-white' : 'border-gray-400'
                   }`}
                 >
                   Not Beginner Friendly
