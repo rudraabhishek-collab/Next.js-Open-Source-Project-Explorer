@@ -4,15 +4,15 @@ import { useState, useEffect } from 'react';
 
 const SAVED_PROJECTS_KEY = 'ioi-saved-projects';
 
-function getSavedProjects(): Set<string> {
-  if (typeof window === 'undefined') return new Set();
+function getSavedProjects() {
+  if (typeof window === 'undefined') return [];
   const stored = localStorage.getItem(SAVED_PROJECTS_KEY);
-  return stored ? new Set(JSON.parse(stored)) : new Set();
+  return stored ? JSON.parse(stored) : [];
 }
 
-function saveProjects(projects: Set<string>) {
+function saveProjects(projects) {
   if (typeof window !== 'undefined') {
-    localStorage.setItem(SAVED_PROJECTS_KEY, JSON.stringify(Array.from(projects)));
+    localStorage.setItem(SAVED_PROJECTS_KEY, JSON.stringify(projects));
   }
 }
 
@@ -21,18 +21,19 @@ export default function BookmarkButton({ projectId, isBookmarked, onToggle }) {
 
   useEffect(() => {
     const saved = getSavedProjects();
-    setLocalIsBookmarked(saved.has(projectId));
+    setLocalIsBookmarked(saved.includes(projectId));
   }, [projectId]);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e) => {
     e.stopPropagation();
     const newState = !localIsBookmarked;
     setLocalIsBookmarked(newState);
     const saved = getSavedProjects();
     if (newState) {
-      saved.add(projectId);
+      saved.push(projectId);
     } else {
-      saved.delete(projectId);
+      const index = saved.indexOf(projectId);
+      if (index > -1) saved.splice(index, 1);
     }
     saveProjects(saved);
     onToggle?.(newState);

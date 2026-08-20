@@ -8,7 +8,7 @@ export default function ProjectCard({ project }) {
     return saved.includes(project.id);
   });
 
-  const toggleBookmark = (value: boolean) => setIsBookmarked(value);
+  const toggleBookmark = (value) => setIsBookmarked(value);
 
   return (
     <div className="bg-white rounded-lg shadow p-6 hover:shadow-xl transition-shadow">
