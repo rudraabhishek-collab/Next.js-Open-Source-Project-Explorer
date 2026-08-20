@@ -1,7 +1,9 @@
 export default function ProjectDetails({ project }) {
   return (
     <div className="bg-white rounded-lg shadow p-8 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold text-gray-900 mb-1">{project.name}</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-1">
+        {project.name}
+      </h2>
       <p className="text-gray-600 text-sm mb-6 line-clamp-4">
         {project.description}
       </p>
@@ -23,7 +25,7 @@ export default function ProjectDetails({ project }) {
         </div>
         <div>
           <p className="text-sm text-gray-500 mb-1">Beginner Friendly:</p>
-          <p className project.beginnerFriendly ? 'text-green-600' : 'text-red-600'>
+          <p className={project.beginnerFriendly ? 'text-green-600' : 'text-red-600'}>
             {project.beginnerFriendly ? 'Yes' : 'No'}
           </p>
         </div>

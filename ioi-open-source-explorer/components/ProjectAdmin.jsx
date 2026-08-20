@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 export default function ProjectAdmin({ project }) {
   return (
     <div className="mt-6 pt-6 border-t border-gray-200">
