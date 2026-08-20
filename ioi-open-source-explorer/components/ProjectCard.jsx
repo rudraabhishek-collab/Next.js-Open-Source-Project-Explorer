@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import BookmarkButton from './BookmarkButton';
 
+'use client';
+
 export default function ProjectCard({ project }) {
   const [isBookmarked, setIsBookmarked] = React.useState(() => {
     if (typeof window === 'undefined') return false;
