@@ -1,252 +1,186 @@
-export const generateStaticParams = async () => {
-  const projects = [
-    { id: '1', name: 'OpenSourceFeed' },
-    { id: '2', name: 'BugBounty' },
-    { id: '3', name: 'SkillTracker' },
-    { id: '4', name: 'DataPulse' },
-    { id: '5', name: 'DocuReady' },
-    { id: '6', name: 'CoreEngine' },
-    { id: '7', name: 'AuthGuard' },
-    { id: '8', name: 'LearnHub' },
-    { id: '9', name: 'API sandbox' },
-    { id: '10', name: 'TestMaster' },
-  ];
-  return projects.map((project) => ({ id: project.id }));
-};
+import { projects } from '../../../data/projects';
+import Link from 'next/link';
+
+const GithubIcon = () => (
+  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C8.422 19.57 7.635 19.2 7.635 19.2c-1.089-.745.083-.729.083-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z" />
+  </svg>
+);
+
+const LinkedinIcon = () => (
+  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+  </svg>
+);
+
+export function generateStaticParams() {
+  return projects.map((p) => ({ id: p.id }));
+}
 
 export default function ProjectDetailPage({ params }) {
-  const projectId = params?.id;
+  const project = projects.find((p) => p.id === params.id);
 
-  // Simple project data lookup
-  const projectData = {
-    '1': {
-      id: '1',
-      name: 'OpenSourceFeed',
-      description: 'A React-based platform for discovering trending open-source projects and contributions',
-      domain: 'Frontend',
-      technologies: ['React', 'TypeScript', 'Node.js', 'Tailwind CSS'],
-      difficulty: 'Intermediate',
-      stars: 2450,
-      beginnerFriendly: true,
-      githubUrl: 'https://github.com/opensource-ioi/opensource-feed',
-      skills: ['React', 'TypeScript', 'API Integration', 'Responsive Design'],
-    },
-    '2': {
-      id: '2',
-      name: 'BugBounty',
-      description: 'A full-stack application for tracking and managing software bugs with AI-powered prioritization',
-      domain: 'Backend',
-      technologies: ['Node.js', 'Go', 'Python', 'PostgreSQL'],
-      difficulty: 'Advanced',
-      stars: 3890,
-      beginnerFriendly: false,
-      githubUrl: 'https://github.com/opensource-ioi/bug-bounty',
-      skills: ['Node.js', 'Go', 'Python', 'Database Design', 'AI/ML'],
-    },
-    '3': {
-      id: '3',
-      name: 'SkillTracker',
-      description: 'A personal learning tracker built with Next.js for IOI students to monitor skill progression',
-      domain: 'Frontend',
-      technologies: ['Next.js', 'TypeScript', 'React', 'Prisma'],
-      difficulty: 'Beginner',
-      stars: 1120,
-      beginnerFriendly: true,
-      githubUrl: 'https://github.com/opensource-ioi/skill-tracker',
-      skills: ['Next.js', 'TypeScript', 'Prisma ORM', 'CSS Modules'],
-    },
-    '4': {
-      id: '4',
-      name: 'DataPulse',
-      description: 'A real-time data visualization dashboard for monitoring system metrics and analytics',
-      domain: 'AI / ML',
-      technologies: ['Python', 'TensorFlow', 'D3.js', 'FastAPI'],
-      difficulty: 'Advanced',
-      stars: 4200,
-      beginnerFriendly: false,
-      githubUrl: 'https://github.com/opensource-ioi/datapulse',
-      skills: ['Python', 'TensorFlow', 'Data Visualization', 'API Development'],
-    },
-    '5': {
-      id: '5',
-      name: 'DocuReady',
-      description: 'A documentation generation tool that automates README creation and API documentation',
-      domain: 'Documentation',
-      technologies: ['JavaScript', 'Node.js', 'Shelljs', 'Markdown'],
-      difficulty: 'Beginner',
-      stars: 890,
-      beginnerFriendly: true,
-      githubUrl: 'https://github.com/opensource-ioi/docu-ready',
-      skills: ['JavaScript', 'Node.js', 'Markdown Processing', 'CLI Tools'],
-    },
-    '6': {
-      id: '6',
-      name: 'CoreEngine',
-      description: 'A high-performance computing library for numerical simulations and scientific computing',
-      domain: 'Core Engine',
-      technologies: ['C++', 'Python', 'CUDA', 'OpenMP'],
-      difficulty: 'Advanced',
-      stars: 5100,
-      beginnerFriendly: false,
-      githubUrl: 'https://github.com/opensource-ioi/core-engine',
-      skills: ['C++', 'Parallel Computing', 'Numerical Methods', 'Optimization'],
-    },
-    '7': {
-      id: '7',
-      name: 'AuthGuard',
-      description: 'A secure authentication middleware for Next.js applications with OAuth and JWT',
-      domain: 'Backend',
-      technologies: ['Next.js', 'Node.js', 'JWT', 'Passport.js'],
-      difficulty: 'Intermediate',
-      stars: 1750,
-      beginnerFriendly: true,
-      githubUrl: 'https://github.com/opensource-ioi/auth-guard',
-      skills: ['Next.js', 'Node.js', 'Authentication', 'Security'],
-    },
-    '8': {
-      id: '8',
-      name: 'LearnHub',
-      description: 'A collaborative learning platform for IOI students to share resources and track progress',
-      domain: 'Frontend',
-      technologies: ['React', 'TypeScript', 'Redux', 'Socket.io'],
-      difficulty: 'Intermediate',
-      stars: 3100,
-      beginnerFriendly: true,
-      githubUrl: 'https://github.com/opensource-ioi-learnhub/learnhub',
-      skills: ['React', 'TypeScript', 'Redux', 'WebSockets'],
-    },
-    '9': {
-      id: '9',
-      name: 'API sandbox',
-      description: 'A sandbox environment for testing and prototyping REST and GraphQL APIs quickly',
-      domain: 'Backend',
-      technologies: ['Go', 'Fiber', 'GraphQL', 'Docker'],
-      difficulty: 'Beginner',
-      stars: 1530,
-      beginnerFriendly: true,
-      githubUrl: 'https://github.com/opensource-ioi/api-sandbox',
-      skills: ['Go', 'Fiber', 'GraphQL', 'Docker'],
-    },
-    '10': {
-      id: '10',
-      name: 'TestMaster',
-      description: 'A comprehensive testing framework for JavaScript projects with CI/CD integration',
-      domain: 'Documentation',
-      technologies: ['JavaScript', 'Jest', 'Cypress', 'GitHub Actions'],
-      difficulty: 'Intermediate',
-      stars: 2050,
-      beginnerFriendly: true,
-      githubUrl: 'https://github.com/opensource-ioi/testmaster',
-      skills: ['JavaScript', 'Jest', 'Cypress', 'CI/CD'],
-    },
-  }[projectId];
-
-  if (!projectId || !projectData) {
+  if (!project) {
     return (
-      <div className="min-h-screen bg-gray-100 p-8">
-        <div className="max-w-md mx-auto text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">
-            Project not found
-          </h1>
-          <p className="text-gray-600 mb-6">
-            The project you're looking for does not exist.
-          </p>
-          <div>
-            <a
-              href="/projects"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-            >
-              Back to Projects
-            </a>
-          </div>
+      <main className="min-h-screen bg-[#0c0c0c] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-white/25 text-sm mb-2">404</p>
+          <h1 className="text-2xl font-bold text-white/60 mb-3">Project Not Found</h1>
+          <p className="text-white/25 mb-6 text-sm">The project you're looking for doesn't exist.</p>
+          <Link
+            href="/projects"
+            className="text-sm bg-[#e8dcc8] text-black px-5 py-2.5 rounded-full hover:bg-[#d9ccb4] transition-colors font-bold"
+          >
+            Back to Projects
+          </Link>
         </div>
-      </div>
+      </main>
     );
   }
 
-  const project = projectData;
+  const slots = project.stars > 3000 ? 30 : project.stars > 2000 ? 15 : project.stars > 1000 ? 10 : 5;
+  const repoPath = project.githubUrl.replace('https://github.com/', '');
 
   return (
-    <div className="bg-white rounded-lg shadow p-8 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold text-gray-900 mb-1">
-        {project.name}
-      </h2>
-      <p className="text-gray-600 text-sm mb-6 line-clamp-4">
-        {project.description}
-      </p>
+    <main className="min-h-screen bg-[#0c0c0c] pt-16 pb-20 px-4">
+      <div className="max-w-2xl mx-auto">
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-        <div>
-          <p className="text-sm text-gray-500 mb-1">Domain:</p>
-          <p className="font-medium text-gray-900">{project.domain}</p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-500 mb-1">Difficulty:</p>
-          <p className={`font-medium ${project.difficulty.toLowerCase()}`}>
-            {project.difficulty}
-          </p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-500 mb-1">Stars:</p>
-          <p className="font-medium text-gray-900">{project.stars}</p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-500 mb-1">Beginner Friendly:</p>
-          <p className={project.beginnerFriendly ? 'text-green-600' : 'text-red-600'}>
-            {project.beginnerFriendly ? 'Yes' : 'No'}
-          </p>
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <p className="text-sm text-gray-500 mb-2">Technologies:</p>
-        <div className="flex flex-wrap gap-2">
-          {project.technologies.map((tech, index) => (
-            <span
-              key={index}
-              className="inline-block px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <p className="text-sm text-gray-500 mb-2">Skills Required:</p>
-        <div className="flex flex-wrap gap-2">
-          {project.skills.map((skill, index) => (
-            <span
-              key={index}
-              className="inline-block px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-8 pt-8 border-t border-gray-200">
-        <a
-          href={project.githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors"
+        {/* Back */}
+        <Link
+          href="/projects"
+          className="inline-flex items-center gap-1.5 text-white/25 hover:text-white/55 text-xs mb-8 transition-colors mt-4"
         >
-          View on GitHub
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="-mr-1 inline align-middle h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              d="M12 0l-1.46 1.46 1.42 1.42L16.74 8l6.06 6.06L8 16.74l-1.46 1.42L12 24l-12-12z"
-            />
+          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-        </a>
+          Back to Projects
+        </Link>
+
+        <div className="bg-[#161616] border border-white/[0.08] rounded-2xl overflow-hidden">
+
+          {/* Header */}
+          <div className="p-7 border-b border-white/[0.06]">
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <h1 className="text-2xl font-bold text-white leading-tight">{project.name}</h1>
+              <div className="shrink-0 text-right">
+                <p className="text-[9px] uppercase tracking-[0.18em] text-white/25 font-semibold">SLOTS</p>
+                <p className="text-white font-black text-3xl leading-tight">{slots}</p>
+              </div>
+            </div>
+
+            {/* Domain + difficulty badge row */}
+            <div className="flex items-center gap-2 flex-wrap mb-4">
+              <span className="text-[9px] uppercase tracking-[0.18em] font-bold text-white/40 border border-white/[0.12] rounded px-1.5 py-0.5">
+                {project.domain}
+              </span>
+              <span className={`text-[11px] px-2 py-0.5 rounded border font-medium ${
+                project.difficulty === 'Beginner'
+                  ? 'text-emerald-400 border-emerald-500/25 bg-emerald-500/8'
+                  : project.difficulty === 'Intermediate'
+                  ? 'text-amber-400 border-amber-500/25 bg-amber-500/8'
+                  : 'text-red-400 border-red-500/25 bg-red-500/8'
+              }`}>
+                {project.difficulty}
+              </span>
+              {project.beginnerFriendly && (
+                <span className="text-[11px] px-2 py-0.5 rounded border text-sky-400 border-sky-500/25 bg-sky-500/8 font-medium">
+                  Good First Issue ✓
+                </span>
+              )}
+              <span className="text-white/25 text-xs ml-auto">⭐ {project.stars.toLocaleString()}</span>
+            </div>
+
+            {/* Repo path */}
+            <div className="flex items-center gap-1.5 mb-5">
+              <GithubIcon />
+              <span className="text-white/30 text-xs font-mono truncate">{repoPath}</span>
+            </div>
+
+            {/* Description */}
+            <p className="text-white/50 text-sm leading-relaxed">{project.description}</p>
+          </div>
+
+          {/* Technologies */}
+          <div className="p-7 border-b border-white/[0.06]">
+            <p className="text-[9px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-3">TECHNOLOGIES</p>
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.map((tech, i) => (
+                <span key={i} className="text-xs px-3 py-1 bg-white/[0.04] border border-white/[0.08] rounded-full text-white/55">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills */}
+          {project.skills && project.skills.length > 0 && (
+            <div className="p-7 border-b border-white/[0.06]">
+              <p className="text-[9px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-3">SKILLS REQUIRED</p>
+              <div className="flex flex-wrap gap-2">
+                {project.skills.map((skill, i) => (
+                  <span key={i} className="text-xs px-3 py-1 bg-sky-500/[0.06] border border-sky-500/[0.18] rounded-full text-sky-300/70">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Project Admin */}
+          {project.projectAdmin && (
+            <div className="p-7 border-b border-white/[0.06]">
+              <p className="text-[9px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-4">PROJECT ADMIN</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white/[0.07] border border-white/[0.1] flex items-center justify-center text-white/50 font-bold text-sm shrink-0">
+                  {project.projectAdmin.name[0].toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-sm">{project.projectAdmin.name}</p>
+                  <div className="flex items-center gap-4 mt-1.5">
+                    <a
+                      href={project.projectAdmin.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-white/35 hover:text-white/65 text-xs transition-colors"
+                    >
+                      <GithubIcon />
+                      github
+                    </a>
+                    <a
+                      href={project.projectAdmin.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-white/35 hover:text-white/65 text-xs transition-colors"
+                    >
+                      <LinkedinIcon />
+                      linkedin
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Footer actions */}
+          <div className="p-7 flex flex-col sm:flex-row gap-3">
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 bg-[#e8dcc8] text-black font-bold py-3 rounded-full hover:bg-[#d9ccb4] transition-colors text-sm"
+            >
+              <GithubIcon />
+              GitHub Repo ↗
+            </a>
+            <Link
+              href="/projects"
+              className="flex-1 flex items-center justify-center gap-2 bg-white/[0.05] border border-white/[0.1] text-white/60 font-medium py-3 rounded-full hover:bg-white/[0.08] hover:text-white/80 transition-colors text-sm"
+            >
+              ← All Projects
+            </Link>
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

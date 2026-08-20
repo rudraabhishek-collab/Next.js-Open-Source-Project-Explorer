@@ -1,8 +1,21 @@
-export default function TrackFilter({ tracks, onTrackChange }) {
+'use client';
+
+export default function TrackFilter({ tracks, selectedTrack, onTrackChange }) {
   return (
-    <div>
-      <span className="text-sm text-gray-600 mr-2">Track:</span>
-      <button className="mx-1 px-2 py-1 text-sm rounded hover:bg-gray-200">All</button>
+    <div className="flex flex-wrap items-center gap-2">
+      {tracks.map((track) => (
+        <button
+          key={track}
+          onClick={() => onTrackChange(track)}
+          className={`text-sm px-4 py-1.5 rounded-full border font-medium transition-colors ${
+            selectedTrack === track
+              ? 'bg-[#e8dcc8] text-black border-[#e8dcc8]'
+              : 'border-white/[0.12] text-white/50 hover:border-white/25 hover:text-white/75 bg-transparent'
+          }`}
+        >
+          {track}
+        </button>
+      ))}
     </div>
   );
 }

@@ -2,50 +2,45 @@
 
 import { useState, useEffect } from 'react';
 
-const SAVED_PROJECTS_KEY = 'ioi-saved-projects';
+const KEY = 'ioi-saved-projects';
 
-function getSavedProjects() {
+function getSaved() {
   if (typeof window === 'undefined') return [];
-  const stored = localStorage.getItem(SAVED_PROJECTS_KEY);
-  return stored ? JSON.parse(stored) : [];
-}
-
-function saveProjects(projects) {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(SAVED_PROJECTS_KEY, JSON.stringify(projects));
-  }
+  const s = localStorage.getItem(KEY);
+  return s ? JSON.parse(s) : [];
 }
 
 export default function BookmarkButton({ projectId, isBookmarked, onToggle }) {
-  const [localIsBookmarked, setLocalIsBookmarked] = useState(isBookmarked);
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
-    const saved = getSavedProjects();
-    setLocalIsBookmarked(saved.includes(projectId));
+    setActive(getSaved().includes(projectId));
   }, [projectId]);
 
-  const handleClick = (e) => {
+  const handle = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    const newState = !localIsBookmarked;
-    setLocalIsBookmarked(newState);
-    const saved = getSavedProjects();
-    if (newState) {
-      saved.push(projectId);
+    const saved = getSaved();
+    let next;
+    if (active) {
+      next = saved.filter((id) => id !== projectId);
     } else {
-      const index = saved.indexOf(projectId);
-      if (index > -1) saved.splice(index, 1);
+      next = [...saved, projectId];
     }
-    saveProjects(saved);
-    onToggle?.(newState);
+    localStorage.setItem(KEY, JSON.stringify(next));
+    setActive(!active);
+    onToggle?.(!active);
   };
 
   return (
     <button
-      onClick={handleClick}
-      className="text-gray-400 hover:text-yellow-500 p-1 rounded transition-colors"
-      title={localIsBookmarked ? 'Remove bookmark' : 'Save bookmark'}
+      onClick={handle}
+      title={active ? 'Remove bookmark' : 'Save project'}
+      className={`text-lg transition-colors ${
+        active ? 'text-[#e8dcc8]' : 'text-white/20 hover:text-white/50'
+      }`}
     >
-      {localIsBookmarked ? '★' : '☆'}
+      {active ? '★' : '☆'}
     </button>
   );
 }

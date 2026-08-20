@@ -1,182 +1,124 @@
 'use client';
 
+import { useState } from 'react';
 import SearchBar from '../../components/SearchBar';
 import StackFilter from '../../components/StackFilter';
 import TrackFilter from '../../components/TrackFilter';
 import ProjectList from '../../components/ProjectList';
 import { projects } from '../../data/projects';
 
+const TRACKS = ['All', 'Core Engine', 'Backend', 'Frontend', 'AI / ML', 'Documentation'];
+const STACKS = ['React', 'TypeScript', 'Node.js', 'Go', 'Python', 'Next.js', 'Tailwind CSS'];
+
+const totalSlots = projects.reduce((sum, p) =>
+  sum + (p.stars > 3000 ? 30 : p.stars > 2000 ? 15 : p.stars > 1000 ? 10 : 5), 0
+);
+
 export default function ProjectsPage() {
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [selectedStack, setSelectedStack] = React.useState('All');
-  const [selectedTrack, setSelectedTrack] = React.useState('All');
-  const [selectedDifficulty, setSelectedDifficulty] = React.useState('All');
-  const [selectedBeginnerFriendly, setSelectedBeginnerFriendly] = React.useState('All');
+  const [search, setSearch] = useState('');
+  const [stack, setStack] = useState('All');
+  const [track, setTrack] = useState('All');
+  const [openOnly, setOpenOnly] = useState(false);
 
-  const filteredProjects = projects.filter((project) => {
-    const matchesSearch =
-      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.technologies.some((tech) => tech.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      project.skills.some((skill) => skill.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filtered = projects.filter((p) => {
+    const q = search.toLowerCase();
+    const matchSearch =
+      !q ||
+      p.name.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q) ||
+      p.technologies.some((t) => t.toLowerCase().includes(q)) ||
+      (p.skills && p.skills.some((s) => s.toLowerCase().includes(q)));
 
-    const matchesStack =
-      selectedStack === 'All' ||
-      project.technologies.some((tech) => tech.toLowerCase() === selectedStack.toLowerCase());
+    const matchStack =
+      stack === 'All' ||
+      p.technologies.some((t) => t.toLowerCase() === stack.toLowerCase());
 
-    const matchesTrack =
-      selectedTrack === 'All' ||
-      project.domain.toLowerCase() === selectedTrack.toLowerCase();
+    const matchTrack =
+      track === 'All' || p.domain.toLowerCase() === track.toLowerCase();
 
-    const matchesDifficulty =
-      selectedDifficulty === 'All' ||
-      project.difficulty === selectedDifficulty;
-
-    const matchesBeginnerFriendly =
-      selectedBeginnerFriendly === 'All' ||
-      project.beginnerFriendly === (selectedBeginnerFriendly === 'Beginner Friendly');
-
-    return (
-      matchesSearch &&
-      matchesStack &&
-      matchesTrack &&
-      matchesDifficulty &&
-      matchesBeginnerFriendly
-    );
+    return matchSearch && matchStack && matchTrack;
   });
 
-  const clearFilters = () => {
-    setSearchQuery('');
-    setSelectedStack('All');
-    setSelectedTrack('All');
-    setSelectedDifficulty('All');
-    setSelectedBeginnerFriendly('All');
-  };
-
   return (
-    <main className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center sm:gap-6 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Explore Open-Source Projects
-            </h1>
-            <p className="text-gray-600">
-              Browse approved projects, discover technologies, and find a project that matches your skills.
-            </p>
-          </div>
+    <div className="min-h-screen bg-[#0c0c0c]">
 
-          <div className="mt-4 sm:mt-0 w-full sm:w-1/2">
-            <SearchBar
-              placeholder="Search projects, technologies, or requirements..."
-              onSearch={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+      {/* Page header */}
+      <div className="pt-24 pb-10 px-6 text-center border-b border-white/[0.06]">
+        <p className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-semibold mb-3">
+          INGESTED MONOREPO PROJECTS
+        </p>
+        <h1 className="text-4xl sm:text-5xl md:text-[3.25rem] font-bold text-white leading-[1.1] max-w-3xl mx-auto">
+          Explore{' '}
+          <em className="italic text-[#e8dcc8]">Open Source Specifications.</em>
+        </h1>
+        <p className="mt-4 text-white/35 text-sm max-w-lg mx-auto leading-relaxed">
+          Browse through approved open-source projects proposed by Project Admins.
+          Review tech requirements, connect with PAs on public profiles, and choose your track.
+        </p>
+      </div>
+
+      {/* Filters */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-4 space-y-4">
+
+        {/* Search + open slots checkbox */}
+        <div className="flex flex-wrap items-center gap-4">
+          <SearchBar onSearch={setSearch} value={search} />
+          <label className="flex items-center gap-2 cursor-pointer ml-auto shrink-0">
+            <div
+              role="checkbox"
+              aria-checked={openOnly}
+              tabIndex={0}
+              onClick={() => setOpenOnly(!openOnly)}
+              onKeyDown={(e) => e.key === 'Enter' && setOpenOnly(!openOnly)}
+              className={`w-4 h-4 border rounded flex items-center justify-center transition-colors cursor-pointer ${
+                openOnly
+                  ? 'bg-[#e8dcc8] border-[#e8dcc8]'
+                  : 'bg-transparent border-white/20 hover:border-white/35'
+              }`}
+            >
+              {openOnly && (
+                <svg className="w-2.5 h-2.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+            </div>
+            <span className="text-[12px] text-white/35 select-none">
+              Only show open slots ({totalSlots} total slots)
+            </span>
+          </label>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 mb-8">
-          <div className="sm:col-span-2 sm:grid-cols-3 gap-6">
-            <TrackFilter
-              tracks={['All', 'Core Engine', 'Frontend', 'Backend', 'AI / ML']}
-              onTrackChange={(e) => setSelectedTrack(e.target.value)}
-            />
-            <StackFilter
-              stacks={['React', 'TypeScript', 'JavaScript', 'Node.js', 'Next.js', 'Go', 'Python']}
-              onStackChange={(e) => setSelectedStack(e.target.value)}
-            />
-            <div className="sm:col-span-2">
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <button
-                  onClick={() => setSelectedDifficulty('All')}
-                  className={`px-3 py-1 text-sm rounded border ${
-                    selectedDifficulty === 'All'
-                      ? 'bg-blue-600 text-white'
-                      : 'border-gray-400'
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setSelectedDifficulty('Beginner')}
-                  className={`px-3 py-1 text-sm rounded border ${
-                    selectedDifficulty === 'Beginner' ? 'bg-blue-600 text-white' : 'border-gray-400'
-                  }`}
-                >
-                  Beginner
-                </button>
-                <button
-                  onClick={() => setSelectedDifficulty('Intermediate')}
-                  className={`px-3 py-1 text-sm rounded border ${
-                    selectedDifficulty === 'Intermediate' ? 'bg-blue-600 text-white' : 'border-gray-400'
-                  }`}
-                >
-                  Intermediate
-                </button>
-                <button
-                  onClick={() => setSelectedDifficulty('Advanced')}
-                  className={`px-3 py-1 text-sm rounded border ${
-                    selectedDifficulty === 'Advanced' ? 'bg-blue-600 text-white' : 'border-gray-400'
-                  }`}
-                >
-                  Advanced
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  onClick={() => setSelectedBeginnerFriendly('All')}
-                  className={`px-3 py-1 text-sm rounded border ${
-                    selectedBeginnerFriendly === 'All' ? 'bg-blue-600 text-white' : 'border-gray-400'
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setSelectedBeginnerFriendly('Beginner Friendly')}
-                  className={`px-3 py-1 text-sm rounded border ${
-                    selectedBeginnerFriendly === 'Beginner Friendly' ? 'bg-blue-600 text-white' : 'border-gray-400'
-                  }`}
-                >
-                  Beginner Friendly
-                </button>
-                <button
-                  onClick={() => setSelectedBeginnerFriendly('Not Beginner Friendly')}
-                  className={`px-3 py-1 text-sm rounded border ${
-                    selectedBeginnerFriendly === 'Not Beginner Friendly' ? 'bg-blue-600 text-white' : 'border-gray-400'
-                  }`}
-                >
-                  Not Beginner Friendly
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* Stack filters */}
+        <StackFilter stacks={STACKS} selectedStack={stack} onStackChange={setStack} />
 
-          <div className="sm:col-span-2">
+        {/* Track tabs */}
+        <TrackFilter tracks={TRACKS} selectedTrack={track} onTrackChange={setTrack} />
+      </div>
+
+      {/* Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 pt-2">
+        {filtered.length === 0 ? (
+          <div className="text-center py-24">
+            <p className="text-white/35 text-lg mb-1">No projects found</p>
+            <p className="text-white/20 text-sm mb-6">
+              Try adjusting your search or filters.
+            </p>
             <button
-              onClick={clearFilters}
-              className="w-full py-2 px-4 mt-4 text-sm font-medium bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              onClick={() => { setSearch(''); setStack('All'); setTrack('All'); }}
+              className="text-xs text-[#e8dcc8] border border-[#e8dcc8]/25 px-4 py-2 rounded-full hover:bg-[#e8dcc8]/8 transition-colors"
             >
-              Clear Filters
+              Clear all filters
             </button>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 mb-8">
-          <div className="sm:col-span-2 sm:grid-cols-3 gap-6">
-            {filteredProjects.length === 0 ? (
-              <div className="col-span-1 sm:col-span-2 text-center py-12">
-                <p className="text-gray-600 text-lg">
-                  No projects found
-                </p>
-                <p className="text-gray-500 mt-2">
-                  Try changing your search or filters.
-                </p>
-              </div>
-            ) : (
-              <ProjectList projects={filteredProjects} />
-            )}
-          </div>
-        </div>
+        ) : (
+          <>
+            <p className="text-[11px] text-white/20 mb-4">
+              {filtered.length} project{filtered.length !== 1 ? 's' : ''} found
+            </p>
+            <ProjectList projects={filtered} />
+          </>
+        )}
       </div>
-    </main>
+    </div>
   );
 }
