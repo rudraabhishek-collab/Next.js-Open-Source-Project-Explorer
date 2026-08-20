@@ -10,6 +10,8 @@ export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedStack, setSelectedStack] = React.useState('All');
   const [selectedTrack, setSelectedTrack] = React.useState('All');
+  const [selectedDifficulty, setSelectedDifficulty] = React.useState('All');
+  const [selectedBeginnerFriendly, setSelectedBeginnerFriendly] = React.useState('All');
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
@@ -26,8 +28,30 @@ export default function ProjectsPage() {
       selectedTrack === 'All' ||
       project.domain.toLowerCase() === selectedTrack.toLowerCase();
 
-    return matchesSearch && matchesStack && matchesTrack;
+    const matchesDifficulty =
+      selectedDifficulty === 'All' ||
+      project.difficulty === selectedDifficulty;
+
+    const matchesBeginnerFriendly =
+      selectedBeginnerFriendly === 'All' ||
+      project.beginnerFriendly === (selectedBeginnerFriendly === 'Beginner Friendly');
+
+    return (
+      matchesSearch &&
+      matchesStack &&
+      matchesTrack &&
+      matchesDifficulty &&
+      matchesBeginnerFriendly
+    );
   });
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setSelectedStack('All');
+    setSelectedTrack('All');
+    setSelectedDifficulty('All');
+    setSelectedBeginnerFriendly('All');
+  };
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -60,20 +84,99 @@ export default function ProjectsPage() {
               stacks={['React', 'TypeScript', 'JavaScript', 'Node.js', 'Next.js', 'Go', 'Python']}
               onStackChange={(e) => setSelectedStack(e.target.value)}
             />
+            <div className="sm:col-span-2">
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <button
+                  onClick={() => setSelectedDifficulty('All')}
+                  className={`px-3 py-1 text-sm rounded border ${
+                    selectedDifficulty === 'All'
+                      ? 'bg-blue-600 text-white'
+                      : 'border-gray-400'
+                  }`}
+                >
+                  All
+                </button>
+                <button
+                  onClick={() => setSelectedDifficulty('Beginner')}
+                  className={`px-3 py-1 text-sm rounded border ${
+                    selectedDifficulty === 'Beginner' ? 'bg-blue-600 text-white' : 'border-gray-400'
+                  }`}
+                >
+                  Beginner
+                </button>
+                <button
+                  onClick={() => setSelectedDifficulty('Intermediate')}
+                  className={`px-3 py-1 text-sm rounded border ${
+                    selectedDifficulty === 'Intermediate' ? 'bg-blue-600 text-white' : 'border-gray-400'
+                  }`}
+                >
+                  Intermediate
+                </button>
+                <button
+                  onClick={() => setSelectedDifficulty('Advanced')}
+                  className={`px-3 py-1 text-sm rounded border ${
+                    selectedDifficulty === 'Advanced' ? 'bg-blue-600 text-white' : 'border-gray-400'
+                  }`}
+                >
+                  Advanced
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setSelectedBeginnerFriendly('All')}
+                  className={`px-3 py-1 text-sm rounded border ${
+                    selectedBeginnerFriendly === 'All' ? 'bg-blue-600 text-white' : 'border-gray-400'
+                  }`}
+                >
+                  All
+                </button>
+                <button
+                  onClick={() => setSelectedBeginnerFriendly('Beginner Friendly')}
+                  className={`px-3 py-1 text-sm rounded border ${
+                    selectedBeginnerFriendly === 'Beginner Friendly' ? 'bg-blue-600 text-white' : 'border-gray-400'
+                  }`}
+                >
+                  Beginner Friendly
+                </button>
+                <button
+                  onClick={() => setSelectedBeginnerFriendly('Not Beginner Friendly')}
+                  className={`px-3 py-1 text-sm rounded border ${
+                    !project.beginnerFriendly && selectedBeginnerFriendly !== 'All'
+                      ? 'bg-blue-600 text-white'
+                      : 'border-gray-400'
+                  }`}
+                >
+                  Not Beginner Friendly
+                </button>
+              </div>
+            </div>
           </div>
 
-          {filteredProjects.length === 0 ? (
-            <div className="col-span-1 sm:col-span-2 text-center py-12">
-              <p className="text-gray-600 text-lg">
-                No projects found
-              </p>
-              <p className="text-gray-500 mt-2">
-                Try changing your search or filters.
-              </p>
-            </div>
-          ) : (
-            <ProjectList projects={filteredProjects} />
-          )}
+          <div className="sm:col-span-2">
+            <button
+              onClick={clearFilters}
+              className="w-full py-2 px-4 mt-4 text-sm font-medium bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 mb-8">
+          <div className="sm:col-span-2 sm:grid-cols-3 gap-6">
+            {filteredProjects.length === 0 ? (
+              <div className="col-span-1 sm:col-span-2 text-center py-12">
+                <p className="text-gray-600 text-lg">
+                  No projects found
+                </p>
+                <p className="text-gray-500 mt-2">
+                  Try changing your search or filters.
+                </p>
+              </div>
+            ) : (
+              <ProjectList projects={filteredProjects} />
+            )}
+          </div>
         </div>
       </div>
     </main>
