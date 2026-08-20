@@ -1,6 +1,15 @@
 import Link from 'next/link';
+import BookmarkButton from './BookmarkButton';
 
 export default function ProjectCard({ project }) {
+  const [isBookmarked, setIsBookmarked] = React.useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = JSON.parse(localStorage.getItem('ioi-saved-projects') || '[]');
+    return saved.includes(project.id);
+  });
+
+  const toggleBookmark = (value: boolean) => setIsBookmarked(value);
+
   return (
     <div className="bg-white rounded-lg shadow p-6 hover:shadow-xl transition-shadow">
       <div className="flex items-center justify-between mb-4">
@@ -41,6 +50,11 @@ export default function ProjectCard({ project }) {
         >
           View Project
         </Link>
+        <BookmarkButton
+          projectId={project.id}
+          isBookmarked={isBookmarked}
+          onToggle={toggleBookmark}
+        />
       </div>
     </div>
   );

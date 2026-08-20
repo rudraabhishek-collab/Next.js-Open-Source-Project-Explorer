@@ -1,4 +1,17 @@
+'use client';
+
+import BookmarkButton from './BookmarkButton';
+import Link from 'next/link';
+import { useState } from 'react';
+
 export default function ProjectDetails({ project }) {
+  const [isBookmarked, setIsBookmarked] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = JSON.parse(localStorage.getItem('ioi-saved-projects') || '[]');
+    return saved.includes(project.id);
+  });
+
+  const toggleBookmark = (value: boolean) => setIsBookmarked(value);
   return (
     <div className="bg-white rounded-lg shadow p-8 max-w-2xl mx-auto">
       <h2 className="text-2xl font-bold text-gray-900 mb-1">
@@ -60,6 +73,11 @@ export default function ProjectDetails({ project }) {
       </div>
 
       <div className="mt-8 pt-8 border-t border-gray-200">
+        <BookmarkButton
+          projectId={project.id}
+          isBookmarked={isBookmarked}
+          onToggle={toggleBookmark}
+        />
         <a
           href={project.githubUrl}
           target="_blank"
