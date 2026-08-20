@@ -62,7 +62,18 @@ export default function ProjectsPage() {
             />
           </div>
 
-          <ProjectList projects={filteredProjects} />
+          {filteredProjects.length === 0 ? (
+            <div className="col-span-1 sm:col-span-2 text-center py-12">
+              <p className="text-gray-600 text-lg">
+                No projects found
+              </p>
+              <p className="text-gray-500 mt-2">
+                Try changing your search or filters.
+              </p>
+            </div>
+          ) : (
+            <ProjectList projects={filteredProjects} />
+          )}
         </div>
       </div>
     </main>
