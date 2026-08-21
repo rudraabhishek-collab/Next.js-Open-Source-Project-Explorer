@@ -56,23 +56,6 @@ ioi-open-source-explorer/
 - **SearchBar** — Input field that triggers search callbacks
 - **StackFilter** / **TrackFilter** — Filter buttons for narrowing down projects
 
-## Getting Started
-
-```bash
-npm install
-npm run dev
-```
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-The app will also be available at `/projects` for browsing projects and `/saved` for viewing bookmarked projects.
-
 ## How It Works
 
 ### Search
@@ -105,21 +88,15 @@ The application uses `localStorage` with the key `ioi-saved-projects` to persist
 
 ## Screenshots
 
-![Homepage placeholder](placeholder-homepage.png)
+<img width="1470" height="835" alt="Screenshot 2026-08-21 at 12 31 31 PM" src="https://github.com/user-attachments/assets/2d7461ce-89f4-4cbf-a145-592c81dff9e0" />
 
-![Projects browsing placeholder](placeholder-projects.png)
 
-![Saved projects placeholder](placeholder-saved.png)
+<img width="1470" height="835" alt="Screenshot 2026-08-21 at 12 32 07 PM" src="https://github.com/user-attachments/assets/ecff7a98-512d-403c-a278-37de11ced7a0" />
 
-*Placeholders for screenshots — add actual screenshots as needed.*
 
 ## Live Demo
 
-[Vercel Deployment URL placeholder]
-
-## GitHub Repository
-
-[GitHub Repository URL placeholder]
+https://next-js-open-source-project-explorer-4q3rf8pnf-rudra-c85c.vercel.app/
 
 ## What I Learned
 
