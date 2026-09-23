@@ -29,11 +29,11 @@ export default function Navbar() {
           </div>
           {/* Wordmark */}
           <div className="hidden sm:flex flex-col leading-none gap-[3px]">
-            <span className="text-white font-semibold text-[13px] tracking-tight leading-none">
-              Open-Source Explorer
+            <span className="text-BLACK font-semibold text-[13px] tracking-tight leading-none">
+              Open-Source
             </span>
             <span className="text-[#e8dcc8]/45 text-[9px] uppercase tracking-[0.2em] font-medium leading-none">
-              by Institute of Innovation
+             Institute of Innovation
             </span>
           </div>
         </Link>
